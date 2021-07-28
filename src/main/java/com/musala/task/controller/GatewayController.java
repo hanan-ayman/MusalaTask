@@ -1,7 +1,6 @@
 package com.musala.task.controller;
 
 import com.musala.task.GatewayApi;
-import com.musala.task.errorhandler.NotFoundException;
 import com.musala.task.model.Device;
 import com.musala.task.model.Gateway;
 import com.musala.task.service.GatewayService;

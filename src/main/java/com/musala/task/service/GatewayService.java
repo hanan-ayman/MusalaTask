@@ -8,7 +8,6 @@ import com.musala.task.errorhandler.NotValidMoreThanTenException;
 import com.musala.task.mapper.GatewayMapper;
 import com.musala.task.model.Device;
 import com.musala.task.model.Gateway;
-import com.musala.task.repository.DeviceRepository;
 import com.musala.task.repository.GatewayRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,7 @@ public class GatewayService {
     GatewayMapper gatewayMapper;
     @Autowired
     ModelMapper mapper;
-    @Autowired
-    DeviceRepository deviceRepository;
+
 
     public List<Gateway> getAllGateways() {
         return gatewayMapper.mapEntityResponse(gatewayRepository.findAll());
@@ -72,7 +70,7 @@ public class GatewayService {
             } else
                 throw new NotFoundException("Device not found at the given gateway");
         }else{
-            throw new NotFoundException("the given gateway not found");
+            throw new NotFoundException("the given gateway not found"); //
         }
     }
 
