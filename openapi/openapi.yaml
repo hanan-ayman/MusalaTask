@@ -1,0 +1,150 @@
+openapi: 3.0.0
+info:
+  title: Gateways API
+  version: 1.0.0
+  description: "This is a gateways api \n"
+  contact:
+    email: hanan.ayman.said@gmail.com
+
+tags:
+- name: gateway
+- name: device
+
+paths:
+  /gateway:
+    get:
+      tags:
+      - gateway
+      summary: an operation for displaying information about all stored gateways (and their devices)
+      operationId: getAllGateways
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gateway'
+    post:
+      tags:
+        - gateway
+      summary: store a gateway
+      operationId: addGateway
+      requestBody:
+        description: gateway body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Gateway'
+        required: true
+      responses:
+        "202":
+          description: success response
+        "400":
+          description: IPv4 address not valid
+  /gateway/{serialNumber}:
+    get:
+      tags:
+      - gateway
+      summary: an operation for displaying details for a single gateway
+      operationId: getOneGateway
+      parameters:
+      - name: serialNumber
+        in: path
+        description: serial number to filter by
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: success operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gateway'
+    post:
+      tags:
+        - device
+      summary: add device to specific gateway
+      operationId: addDevice
+      parameters:
+        - name: serialNumber
+          in: path
+          description: The serialNumber to add the device
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: device body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+        required: true
+      responses:
+        "202":
+          description: success response
+        "400":
+          description: Not Allowed more than 10 Devices Or Dublicate the same device (UID)
+    delete:
+      tags:
+        - device
+      summary: remove a device from specific gateway
+      operationId: deleteDevice
+      parameters:
+        - name: serialNumber
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          schema:
+            type: string
+        - name: deviceUID
+          in: query
+          description: The device UID to be deleated
+          required: true
+          schema:
+            type: number
+      responses:
+        "204":
+          description: resource deleted successfully
+        "400":
+          description: invalid request ( the gateway invalid )
+        "404":
+          description: Not Found device
+components:
+  schemas:
+    Gateway:
+      type: object
+      properties:
+        serialNumber:
+          type: string
+          example: YCHCmNpZ
+        humanName:
+          type: string
+          example: Default gateway
+        IPv4:
+          type: string
+          example: 192.168.1.0
+        devices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Device'
+    Device:
+      type: object
+      properties:
+        uid:
+          type: number
+        vendor:
+          type: string
+        dateCreated:
+          type: string
+        status:
+          type: string
+          enum:
+            - online
+            - offline
+
+
+
+
